@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 import App from "./App.jsx";
 import Home from "./pages/Home/home.jsx";
@@ -16,6 +15,8 @@ import ProductDetail from "./pages/ProductDetail/productDetail.jsx";
 import AdminHome from "./pages/Admin/Home/adminHome.jsx";
 import Orders from "./pages/Admin/Orders/orders.jsx";
 import AddProduct from "./pages/Admin/AddProduct/addproduct.jsx";
+import { Provider } from "react-redux";
+import { store } from "./services/Redux/store.jsx";
 const validate = true;
 const router = createBrowserRouter([
   {
@@ -65,5 +66,7 @@ const router = createBrowserRouter([
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

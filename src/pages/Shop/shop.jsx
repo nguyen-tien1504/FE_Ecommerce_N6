@@ -1,4 +1,29 @@
+import { useState } from "react";
+import { useGetProductByPageQuery } from "../../services/Redux/ProductService/productApi";
+import { Link } from "react-router-dom";
+
 const Shop = () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const { data, isLoading } = useGetProductByPageQuery(pageNumber);
+  console.log(data);
+
+  const navigateToPage = (e) => {
+    e.preventDefault();
+    const targetAction = e.target.getAttribute("data-page");
+
+    if (targetAction === "previous" && pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+
+    if (targetAction === "next" && pageNumber < data?.totalPage) {
+      setPageNumber(pageNumber + 1);
+    }
+
+    if (Number(targetAction)) {
+      setPageNumber(+targetAction);
+    }
+  };
+
   return (
     <>
       <div className="bg-light py-3">
@@ -94,275 +119,42 @@ const Shop = () => {
                   </div>
                 </div>
               </div>
+
+              {/* -------------------- Product List ----------------------- */}
               <div className="row mb-5">
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Tank Top</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect t-shirt</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/shoe_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Corater</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_2.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Polo Shirt</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_3.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">T-Shirt Mockup</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/shoe_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Corater</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Tank Top</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect t-shirt</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/shoe_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Corater</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_2.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Polo Shirt</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_3.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">T-Shirt Mockup</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/shoe_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Corater</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_1.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Tank Top</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect t-shirt</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="col-sm-6 col-lg-4 mb-4"
-                  data-aos="fade-up">
-                  <div className="block-4 text-center border">
-                    <figure className="block-4-image">
-                      <a href="shop-single.html">
-                        <img
-                          src="images/cloth_2.jpg"
-                          alt="Image placeholder"
-                          className="img-fluid"
-                        />
-                      </a>
-                    </figure>
-                    <div className="block-4-text p-4">
-                      <h3>
-                        <a href="shop-single.html">Polo Shirt</a>
-                      </h3>
-                      <p className="mb-0">Finding perfect products</p>
-                      <p className="text-primary font-weight-bold">$50</p>
-                    </div>
-                  </div>
-                </div>
+                {isLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  data.listProduct.map((item) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="col-sm-6 col-lg-4 mb-4"
+                        data-aos="fade-up">
+                        <div className="block-4 text-center border">
+                          <figure className="block-4-image">
+                            <Link to={`/product-detail/${item.id}`}>
+                              <img
+                                src={item.imageUrls}
+                                alt="Image placeholder"
+                                className="img-fluid"
+                              />
+                            </Link>
+                          </figure>
+                          <div className="block-4-text p-4">
+                            <h3>
+                              <Link to={`/product-detail/${item.id}`}>{item.name}</Link>
+                            </h3>
+                            <p className="mb-0">Finding perfect t-shirt</p>
+                            <p className="text-primary font-weight-bold">${item.price}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
+              {/* -------------------- Pagination ----------------------- */}
               <div
                 className="row"
                 data-aos="fade-up">
@@ -370,25 +162,35 @@ const Shop = () => {
                   <div className="site-block-27">
                     <ul>
                       <li>
-                        <a href="#">&lt;</a>
+                        <a
+                          href="#"
+                          data-page="previous"
+                          onClick={(e) => navigateToPage(e)}>
+                          &lt;
+                        </a>
                       </li>
-                      <li className="active">
-                        <span>1</span>
-                      </li>
+                      {[...Array(data?.totalPage)].map((pageCount, index) => {
+                        const currentPageCounting = index + 1;
+                        return (
+                          <li
+                            className={currentPageCounting == pageNumber && "active"}
+                            key={index}>
+                            <a
+                              href="#"
+                              data-page={currentPageCounting}
+                              onClick={(e) => navigateToPage(e)}>
+                              {currentPageCounting}
+                            </a>
+                          </li>
+                        );
+                      })}
                       <li>
-                        <a href="#">2</a>
-                      </li>
-                      <li>
-                        <a href="#">3</a>
-                      </li>
-                      <li>
-                        <a href="#">4</a>
-                      </li>
-                      <li>
-                        <a href="#">5</a>
-                      </li>
-                      <li>
-                        <a href="#">&gt;</a>
+                        <a
+                          href="#"
+                          data-page="next"
+                          onClick={(e) => navigateToPage(e)}>
+                          &gt;
+                        </a>
                       </li>
                     </ul>
                   </div>

@@ -1,15 +1,22 @@
 import { useState } from "react";
+import { useGetProductByIdQuery } from "../../services/Redux/ProductService/productApi";
+import { Link, useParams } from "react-router-dom";
 
 const ProductDetail = () => {
+  const { productId } = useParams();
+
   const [productQuantity, setProductQuantity] = useState(1);
+  const { data, isLoading } = useGetProductByIdQuery(productId);
+  console.log(data);
+
   return (
     <>
       <div className="bg-light py-3">
         <div className="container">
           <div className="row">
             <div className="col-md-12 mb-0">
-              <a href="index.html">Home</a> <span className="mx-2 mb-0">/</span>{" "}
-              <strong className="text-black">Tank Top T-Shirt</strong>
+              <Link to={"/"}>Home</Link> <span className="mx-2 mb-0">/</span>{" "}
+              <strong className="text-black">{!isLoading && data.name}</strong>
             </div>
           </div>
         </div>
@@ -19,81 +26,72 @@ const ProductDetail = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <img
-                src="/images/cloth_1.jpg"
-                alt="Image"
-                className="img-fluid"
-              />
+              {!isLoading && (
+                <img
+                  src={data.imageUrls}
+                  alt="Image"
+                  className="img-fluid"
+                />
+              )}
             </div>
             <div className="col-md-6">
-              <h2 className="text-black">Tank Top T-Shirt</h2>
+              <h2 className="text-black">{!isLoading && data.name}</h2>
+              <p className="mb-4">{!isLoading && data.description}</p>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae,
-                explicabo? Incidunt facere, natus soluta dolores iusto! Molestiae expedita
-                veritatis nesciunt doloremque sint asperiores fuga voluptas, distinctio,
-                aperiam, ratione dolore.
-              </p>
-              <p className="mb-4">
-                Ex numquam veritatis debitis minima quo error quam eos dolorum quidem
-                perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus
-                molestias omnis reiciendis perspiciatis illum hic magni iste, velit
-                aperiam quis.
-              </p>
-              <p>
-                <strong className="text-primary h4">$50.00</strong>
+                <strong className="text-primary h4">${!isLoading && data.price}</strong>
               </p>
               <div className="mb-1 d-flex">
                 <label
-                  htmlFor="option-sm"
+                  htmlFor="size"
                   className="d-flex mr-3 mb-3">
                   <span
                     className="d-inline-block mr-2"
-                    style={{ top: "-2px", position: "relative" }}>
+                    style={{ top: "0", position: "relative" }}>
                     <input
                       type="radio"
-                      id="option-sm"
+                      id="S"
                       name="shop-sizes"
                     />
                   </span>{" "}
                   <span className="d-inline-block text-black">Small</span>
                 </label>
                 <label
-                  htmlFor="option-md"
+                  htmlFor="size"
                   className="d-flex mr-3 mb-3">
                   <span
                     className="d-inline-block mr-2"
-                    style={{ top: "-2px", position: "relative" }}>
+                    style={{ top: "0", position: "relative" }}>
                     <input
                       type="radio"
-                      id="option-md"
+                      id="M"
                       name="shop-sizes"
                     />
                   </span>{" "}
                   <span className="d-inline-block text-black">Medium</span>
                 </label>
                 <label
-                  htmlFor="option-lg"
+                  htmlFor="size"
                   className="d-flex mr-3 mb-3">
                   <span
                     className="d-inline-block mr-2"
-                    style={{ top: "-2px", position: "relative" }}>
+                    style={{ top: "0", position: "relative" }}>
                     <input
                       type="radio"
-                      id="option-lg"
+                      id="L"
                       name="shop-sizes"
                     />
                   </span>{" "}
                   <span className="d-inline-block text-black">Large</span>
                 </label>
                 <label
-                  htmlFor="option-xl"
+                  htmlFor="size"
                   className="d-flex mr-3 mb-3">
                   <span
                     className="d-inline-block mr-2"
-                    style={{ top: "-2px", position: "relative" }}>
+                    style={{ top: "0", position: "relative" }}>
                     <input
                       type="radio"
-                      id="option-xl"
+                      id="XL"
                       name="shop-sizes"
                     />
                   </span>{" "}
@@ -118,7 +116,7 @@ const ProductDetail = () => {
                     className="form-control text-center"
                     style={{ height: "49px" }}
                     value={productQuantity}
-                    placeholder=""
+                    readOnly
                   />
                   <div className="input-group-append">
                     <button
@@ -131,11 +129,11 @@ const ProductDetail = () => {
                 </div>
               </div>
               <p>
-                <a
-                  href="cart.html"
+                <Link
+                  to={"/cart"}
                   className="buy-now btn btn-sm btn-primary">
                   Add To Cart
-                </a>
+                </Link>
               </p>
             </div>
           </div>
