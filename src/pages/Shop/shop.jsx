@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetProductByPageQuery } from "../../services/Redux/ProductService/productApi";
 import { Link } from "react-router-dom";
 import ProductItem from "../../components/productItem";
 
 const Shop = () => {
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, isLoading } = useGetProductByPageQuery(pageNumber);
-  console.log(data);
-
+  const [paramsUrlString, setParamsUrlString] = useState("");
+  const { data, isLoading } = useGetProductByPageQuery(paramsUrlString);
+  useEffect(() => {
+    const paramsUrl = new URLSearchParams(paramsUrlString);
+    paramsUrl.set("pageNum", pageNumber - 1);
+    setParamsUrlString(paramsUrl.toString());
+  }, [pageNumber]);
   const navigateToPage = (e) => {
     e.preventDefault();
     const targetAction = e.target.getAttribute("data-page");
@@ -23,6 +27,16 @@ const Shop = () => {
     if (Number(targetAction)) {
       setPageNumber(+targetAction);
     }
+  };
+
+  const handleAddUrlParameter = (e) => {
+    const paramsUrl = new URLSearchParams(paramsUrlString);
+    paramsUrl.set(
+      e.currentTarget.getAttribute("data-param-name"),
+      e.currentTarget.getAttribute("data-param-value")
+    );
+    setParamsUrlString(paramsUrl.toString());
+    setPageNumber(1)
   };
 
   return (
@@ -61,21 +75,9 @@ const Shop = () => {
                       <div
                         className="dropdown-menu"
                         aria-labelledby="dropdownMenuOffset">
-                        <a
-                          className="dropdown-item"
-                          href="#">
-                          Men
-                        </a>
-                        <a
-                          className="dropdown-item"
-                          href="#">
-                          Women
-                        </a>
-                        <a
-                          className="dropdown-item"
-                          href="#">
-                          Children
-                        </a>
+                        <button className="dropdown-item">Men</button>
+                        <button className="dropdown-item">Women</button>
+                        <button className="dropdown-item">Children</button>
                       </div>
                     </div>
                     <div className="btn-group">
@@ -156,7 +158,9 @@ const Shop = () => {
                             const currentPageCounting = index + 1;
                             return (
                               <li
-                                className={currentPageCounting == pageNumber && "active"}
+                                className={
+                                  currentPageCounting == pageNumber ? "active" : undefined
+                                }
                                 key={index}>
                                 <a
                                   href="#"
@@ -190,23 +194,42 @@ const Shop = () => {
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">
                     <a
-                      href="#"
-                      className="d-flex">
+                      href="#!"
+                      className="d-flex"
+                      data-param-name="categoryId"
+                      onClick={(e) => handleAddUrlParameter(e)}
+                      data-param-value={""}>
+                      <span>All</span> <span className="text-black ml-auto">(2,220)</span>
+                    </a>
+                  </li>
+                  <li className="mb-1">
+                    <a
+                      href="#!"
+                      className="d-flex"
+                      data-param-name="categoryId"
+                      onClick={(e) => handleAddUrlParameter(e)}
+                      data-param-value={3}>
                       <span>Men</span> <span className="text-black ml-auto">(2,220)</span>
                     </a>
                   </li>
                   <li className="mb-1">
                     <a
-                      href="#"
-                      className="d-flex">
+                      href="#!"
+                      className="d-flex"
+                      data-param-name="categoryId"
+                      onClick={(e) => handleAddUrlParameter(e)}
+                      data-param-value={1}>
                       <span>Women</span>{" "}
                       <span className="text-black ml-auto">(2,550)</span>
                     </a>
                   </li>
                   <li className="mb-1">
                     <a
-                      href="#"
-                      className="d-flex">
+                      href="#!"
+                      className="d-flex"
+                      data-param-name="categoryId"
+                      onClick={(e) => handleAddUrlParameter(e)}
+                      data-param-value={2}>
                       <span>Children</span>{" "}
                       <span className="text-black ml-auto">(2,124)</span>
                     </a>
@@ -238,30 +261,55 @@ const Shop = () => {
                     className="d-flex">
                     <input
                       type="checkbox"
-                      id="s_sm"
-                      className="mr-2 mt-1"
+                      className="mr-2"
+                      name="s_sm"
+                      // data-param-name="colorId"
+                      // onChange={(e) => handleAddUrlParameter(e)}
+                      // data-param-value={1}
                     />{" "}
                     <span className="text-black">Small (2,319)</span>
                   </label>
+
                   <label
-                    htmlFor="s_md"
+                    htmlFor="s_m"
                     className="d-flex">
                     <input
                       type="checkbox"
-                      id="s_md"
-                      className="mr-2 mt-1"
+                      className="mr-2"
+                      name="s_m"
+                      // data-param-name="colorId"
+                      // onChange={(e) => handleAddUrlParameter(e)}
+                      // data-param-value={2}
                     />{" "}
                     <span className="text-black">Medium (1,282)</span>
                   </label>
+
                   <label
                     htmlFor="s_lg"
                     className="d-flex">
                     <input
                       type="checkbox"
                       id="s_lg"
-                      className="mr-2 mt-1"
+                      className="mr-2"
+                      // data-param-name="colorId"
+                      // onChange={(e) => handleAddUrlParameter(e)}
+                      // data-param-value={3}
                     />{" "}
                     <span className="text-black">Large (1,392)</span>
+                  </label>
+
+                  <label
+                    htmlFor="s_xl"
+                    className="d-flex">
+                    <input
+                      type="checkbox"
+                      id="s_xl"
+                      className="mr-2"
+                      // data-param-name="colorId"
+                      // onChange={(e) => handleAddUrlParameter(e)}
+                      // data-param-value={4}
+                    />{" "}
+                    <span className="text-black">Extra Large (1,392)</span>
                   </label>
                 </div>
 
