@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useGetProductByPageQuery } from "../../services/Redux/ProductService/productApi";
 import { Link } from "react-router-dom";
+import ProductItem from "../../components/productItem";
 
 const Shop = () => {
   const [pageNumber, setPageNumber] = useState(1);
@@ -30,7 +31,7 @@ const Shop = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12 mb-0">
-              <a href="index.html">Home</a> <span className="mx-2 mb-0">/</span>{" "}
+              <Link to={"/"}>Home</Link> <span className="mx-2 mb-0">/</span>{" "}
               <strong className="text-black">Shop</strong>
             </div>
           </div>
@@ -125,33 +126,12 @@ const Shop = () => {
                 {isLoading ? (
                   <div>Loading...</div>
                 ) : (
-                  data.listProduct.map((item) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className="col-sm-6 col-lg-4 mb-4"
-                        data-aos="fade-up">
-                        <div className="block-4 text-center border">
-                          <figure className="block-4-image">
-                            <Link to={`/product-detail/${item.id}`}>
-                              <img
-                                src={item.imageUrls}
-                                alt="Image placeholder"
-                                className="img-fluid"
-                              />
-                            </Link>
-                          </figure>
-                          <div className="block-4-text p-4">
-                            <h3>
-                              <Link to={`/product-detail/${item.id}`}>{item.name}</Link>
-                            </h3>
-                            <p className="mb-0">Finding perfect t-shirt</p>
-                            <p className="text-primary font-weight-bold">${item.price}</p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
+                  data.content.map((item) => (
+                    <ProductItem
+                      key={item.id}
+                      data={item}
+                    />
+                  ))
                 )}
               </div>
               {/* -------------------- Pagination ----------------------- */}
@@ -161,37 +141,43 @@ const Shop = () => {
                 <div className="col-md-12 text-center">
                   <div className="site-block-27">
                     <ul>
-                      <li>
-                        <a
-                          href="#"
-                          data-page="previous"
-                          onClick={(e) => navigateToPage(e)}>
-                          &lt;
-                        </a>
-                      </li>
-                      {[...Array(data?.totalPage)].map((pageCount, index) => {
-                        const currentPageCounting = index + 1;
-                        return (
-                          <li
-                            className={currentPageCounting == pageNumber && "active"}
-                            key={index}>
+                      {!isLoading && (
+                        <>
+                          <li>
                             <a
                               href="#"
-                              data-page={currentPageCounting}
+                              data-page="previous"
                               onClick={(e) => navigateToPage(e)}>
-                              {currentPageCounting}
+                              &lt;
                             </a>
                           </li>
-                        );
-                      })}
-                      <li>
-                        <a
-                          href="#"
-                          data-page="next"
-                          onClick={(e) => navigateToPage(e)}>
-                          &gt;
-                        </a>
-                      </li>
+
+                          {[...Array(data.totalPage)].map((pageCount, index) => {
+                            const currentPageCounting = index + 1;
+                            return (
+                              <li
+                                className={currentPageCounting == pageNumber && "active"}
+                                key={index}>
+                                <a
+                                  href="#"
+                                  data-page={currentPageCounting}
+                                  onClick={(e) => navigateToPage(e)}>
+                                  {currentPageCounting}
+                                </a>
+                              </li>
+                            );
+                          })}
+
+                          <li>
+                            <a
+                              href="#"
+                              data-page="next"
+                              onClick={(e) => navigateToPage(e)}>
+                              &gt;
+                            </a>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   </div>
                 </div>
