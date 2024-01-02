@@ -12,10 +12,10 @@ export const productApi = createApi({
     }),
     addNewProduct: builder.mutation({
       query: (body) => ({
-        url: "/add",
+        url: `/add`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body
       }),
     }),
   }),

@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import { Field, FieldArray, Form, Formik, useFormik } from "formik";
 import { useAddNewProductMutation } from "../../../services/Redux/ProductService/productApi";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import postFileToFireBase from "../../../services/Firebase/postFileToFireBase";
 
 const AddProduct = () => {
   const [handleAddNewProduct, { isSuccess }] = useAddNewProductMutation();
+  const [file, setFile] = useState();
   const [productDetailList, setProductDetailList] = useState([]);
   const productFormik = useFormik({
     initialValues: {
@@ -16,12 +19,16 @@ const AddProduct = () => {
       description: "",
       typeName: "sneaker",
     },
-    onSubmit: (values, actions) => {
+    onSubmit: async (values, actions) => {
+      const imageURL = await postFileToFireBase(file);
       const dataSend = {
         ...values,
+        imageUrls: imageURL,
         productDetailRequestList: [...productDetailList],
       };
+
       handleAddNewProduct(dataSend);
+      console.log(dataSend);
       if (isSuccess) {
         actions.resetForm();
       }
@@ -38,7 +45,8 @@ const AddProduct = () => {
               <div className="card-body px-0">
                 <form
                   className="sign-in-form px-0"
-                  onSubmit={productFormik.handleSubmit}>
+                  onSubmit={productFormik.handleSubmit}
+                  encType="multipart/form-data">
                   <div className="d-flex flex-wrap">
                     <div className="px-2 col-6">
                       <div className="input-field d-flex align-items-center px-5">
@@ -142,9 +150,12 @@ const AddProduct = () => {
                       <div className="input-field d-flex align-items-center px-5">
                         <input
                           type="file"
-                          placeholder="Product weight"
-                          name="image_file"
+                          placeholder="Product image"
+                          name="files"
                           className="w-100"
+                          accept="image/*"
+                          onChange={(e) => setFile(e.currentTarget.files[0])}
+                          value={productFormik.values.files}
                         />
                       </div>
                     </div>
@@ -214,7 +225,7 @@ const AddProduct = () => {
                                 },
                               ],
                             }}
-                            onSubmit={(values, actions) => {
+                            onSubmit={(values) => {
                               const { productInputRow } = values;
                               // Generate Id
                               const generatIdForProductDetail = productInputRow.map(
@@ -284,7 +295,7 @@ const AddProduct = () => {
                                               />
                                             </div>
 
-                                            <div className="col-2 px-2">
+                                            <div className="col-3 px-2">
                                               <div className="input-group mb-3">
                                                 <div className="input-group-prepend">
                                                   <div className="input-group-text d-flex justify-content-center py-1">
@@ -303,6 +314,23 @@ const AddProduct = () => {
                                                   </div>
                                                 </div>
                                               </div>
+                                            </div>
+
+                                            <div className="col-2 px-2">
+                                              <button
+                                                type="button"
+                                                className="btn btn-danger w-100 m-0"
+                                                style={{
+                                                  color: "#fff",
+                                                  backgroundColor: "#dc3545",
+                                                  borderColor: "#dc3545",
+                                                  height: "34px",
+                                                }}
+                                                onClick={() =>
+                                                  arrayHelpers.remove(index)
+                                                }>
+                                                X
+                                              </button>
                                             </div>
                                           </div>
                                         ))}
