@@ -2,25 +2,46 @@ import { useRef, useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "../../services/Redux/UserService/userApi";
+import { useDispatch } from "react-redux";
+import { login } from "../../services/Redux/UserSlice/userSlice";
+import { Navigate, useNavigate } from "react-router-dom";
 const LoginSignin = () => {
   const [signup, setIsSignUp] = useState(false);
-  const loginUseRef = useRef(null);
+  const [handleRegisterUser] = useRegisterMutation();
+  const [handleLoginUser] = useLoginMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleToggleSignUp = () => {
     setIsSignUp(!signup);
   };
+
   const loginFormik = useFormik({
     initialValues: {
-      name: "",
+      email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(4, "Mininum 4 characters").required("Name is required!"),
+      email: Yup.string()
+        .matches(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          "Not a valid email!!!"
+        )
+        .required("Email is required."),
       password: Yup.string()
         .min(4, "Mininum 4 characters")
         .required("Password is required."),
     }),
     onSubmit: (values) => {
-      alert("Form submitted");
+      handleLoginUser(values)
+        .then(({ data }) => {
+          dispatch(login({ ...values, ...data }));
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
     },
   });
   const signUpformik = useFormik({
@@ -52,7 +73,9 @@ const LoginSignin = () => {
     }),
 
     onSubmit: (values) => {
-      alert("Form submitted");
+      handleRegisterUser(values)
+        .then((resp) => console.log(resp))
+        .catch((err) => console.log(err));
     },
   });
 
@@ -60,9 +83,7 @@ const LoginSignin = () => {
     <>
       <div className={`login-container ${signup && "sign-up-mode"}`}>
         <div className="forms-container">
-          <div
-            className="signin-signup"
-            ref={loginUseRef}>
+          <div className="signin-signup">
             {/* -------------------- Login ------------------- */}
             <form
               action=""
@@ -73,14 +94,14 @@ const LoginSignin = () => {
                 <span className="icon icon-envelope-o d-flex justify-content-center align-items-center"></span>
                 <input
                   type="text"
-                  placeholder="Username"
-                  name="name"
-                  value={loginFormik.values.name}
+                  placeholder="User email"
+                  name="email"
+                  value={loginFormik.values.email}
                   onChange={loginFormik.handleChange}
                 />
               </div>
-              {loginFormik.errors.name && loginFormik.touched.name && (
-                <div className="">{loginFormik.errors.name}</div>
+              {loginFormik.errors.email && loginFormik.touched.email && (
+                <div className="">{loginFormik.errors.email}</div>
               )}
               <div className="input-field">
                 <span className="icon icon-lock d-flex justify-content-center align-items-center"></span>

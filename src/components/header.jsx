@@ -1,6 +1,10 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
   return (
     <header
       className="site-navbar"
@@ -35,9 +39,13 @@ const Header = () => {
               <div className="site-top-icons">
                 <ul>
                   <li>
-                    <Link to={"/login"}>
-                      <span className="icon icon-person"></span>
-                    </Link>
+                    {user ? (
+                      <a href="">Hello {user.email}</a>
+                    ) : (
+                      <Link to={"/login"}>
+                        <span className="icon icon-person"></span>
+                      </Link>
+                    )}
                   </li>
                   <li>
                     <a href="#">
