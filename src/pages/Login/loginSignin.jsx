@@ -8,11 +8,13 @@ import {
 } from "../../services/Redux/UserService/userApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../services/Redux/UserSlice/userSlice";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 const LoginSignin = () => {
   const [signup, setIsSignUp] = useState(false);
   const [handleRegisterUser] = useRegisterMutation();
   const [handleLoginUser] = useLoginMutation();
+  const [cookies, setCookies] = useCookies(["user"]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleToggleSignUp = () => {
@@ -38,7 +40,8 @@ const LoginSignin = () => {
     onSubmit: (values) => {
       handleLoginUser(values)
         .then(({ data }) => {
-          dispatch(login({ ...values, ...data }));
+          setCookies("user", data);
+          dispatch(login(values));
           navigate("/");
         })
         .catch((err) => console.log(err));

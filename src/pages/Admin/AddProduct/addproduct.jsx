@@ -3,9 +3,13 @@ import { Field, FieldArray, Form, Formik, useFormik } from "formik";
 import { useAddNewProductMutation } from "../../../services/Redux/ProductService/productApi";
 import { useState } from "react";
 import postFileToFireBase from "../../../services/Firebase/postFileToFireBase";
+import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
 
 const AddProduct = () => {
   const [handleAddNewProduct, { isSuccess }] = useAddNewProductMutation();
+  const [cookies] = useCookies(["user"]);
+  const token = cookies.user.accessToken;
   const [file, setFile] = useState();
   const [productDetailList, setProductDetailList] = useState([]);
   const productFormik = useFormik({
@@ -24,11 +28,10 @@ const AddProduct = () => {
       const dataSend = {
         ...values,
         imageUrls: imageURL,
-        productDetailRequestList: [...productDetailList],
+        productDetailRequestList: productDetailList,
       };
 
-      handleAddNewProduct(dataSend);
-      console.log(dataSend);
+      handleAddNewProduct({ dataSend, token });
       if (isSuccess) {
         actions.resetForm();
       }
