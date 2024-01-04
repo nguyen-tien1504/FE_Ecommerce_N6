@@ -1019,9 +1019,11 @@ a:hover {
   background-color: #fff;
 }
 
-.product-item-name {
+.product-item-name,
+.admin-table-product-name >p{
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   overflow: hidden;
+  margin-bottom: 0;
 }

@@ -1,9 +1,5 @@
 import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import Home from "./pages/Home/home.jsx";
 import About from "./pages/About/about.jsx";
@@ -17,6 +13,8 @@ import Orders from "./pages/Admin/Orders/orders.jsx";
 import AddProduct from "./pages/Admin/AddProduct/addproduct.jsx";
 import { Provider } from "react-redux";
 import { store } from "./services/Redux/store.jsx";
+import Products from "./pages/Admin/Products/products.jsx";
+import EditProduct from "./pages/Admin/EditProduct/editProduct.jsx";
 const validate = true;
 const router = createBrowserRouter([
   {
@@ -62,6 +60,11 @@ const router = createBrowserRouter([
         path: "/admin/add-product",
         element: <AddProduct />,
       },
+      {
+        path: "/admin/products",
+        element: <Products />,
+      },
+      { path: "/admin/edit/product/:productId", element: <EditProduct /> },
     ],
   },
 ]);

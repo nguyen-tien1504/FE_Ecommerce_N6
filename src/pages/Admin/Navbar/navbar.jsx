@@ -32,11 +32,11 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="nav-link text-black"
-                  href="/emp/home/">
+                  to={"/admin/products"}>
                   View Product Table
-                </a>
+                </Link>
               </li>
               <li>
                 <a

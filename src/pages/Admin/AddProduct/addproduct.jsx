@@ -3,14 +3,15 @@ import { Field, FieldArray, Form, Formik, useFormik } from "formik";
 import { useAddNewProductMutation } from "../../../services/Redux/ProductService/productApi";
 import { useState } from "react";
 import postFileToFireBase from "../../../services/Firebase/postFileToFireBase";
-import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
-  const [handleAddNewProduct, { isSuccess }] = useAddNewProductMutation();
+  const [handleAddNewProduct] = useAddNewProductMutation();
   const [cookies] = useCookies(["user"]);
   const token = cookies.user.accessToken;
   const [file, setFile] = useState();
+  const navigate = useNavigate();
   const [productDetailList, setProductDetailList] = useState([]);
   const productFormik = useFormik({
     initialValues: {
@@ -19,11 +20,11 @@ const AddProduct = () => {
       dimension: "",
       material: "",
       weight: "",
-      categoryName: "Women",
+      category: "Women",
       description: "",
-      typeName: "sneaker",
+      type: "sneaker",
     },
-    onSubmit: async (values, actions) => {
+    onSubmit: async (values) => {
       const imageURL = await postFileToFireBase(file);
       const dataSend = {
         ...values,
@@ -31,10 +32,11 @@ const AddProduct = () => {
         productDetailRequestList: productDetailList,
       };
 
-      handleAddNewProduct({ dataSend, token });
-      if (isSuccess) {
-        actions.resetForm();
-      }
+      handleAddNewProduct({ dataSend, token })
+        .then((res) => {
+          navigate("/admin/products");
+        })
+        .catch((err) => console.log(err));
     },
   });
   return (
@@ -124,7 +126,7 @@ const AddProduct = () => {
                           name="categoryName"
                           className="w-100"
                           onChange={productFormik.handleChange}
-                          value={productFormik.values.categoryName}>
+                          value={productFormik.values.category}>
                           <option value="Women">Women</option>
                           <option value="Children">Children</option>
                           <option value="Men">Men</option>
@@ -140,7 +142,7 @@ const AddProduct = () => {
                           name="typeName"
                           className="w-100"
                           onChange={productFormik.handleChange}
-                          value={productFormik.values.typeName}>
+                          value={productFormik.values.type}>
                           <option value="sneaker">Sneaker</option>
                           <option value="dress">Dress</option>
                           <option value="pants">Pants</option>
@@ -212,7 +214,6 @@ const AddProduct = () => {
                             <button
                               type="button"
                               className="close"
-                              data-dismiss="modal"
                               aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -307,7 +308,7 @@ const AddProduct = () => {
                                                       className="w-100"
                                                       placeholder="outOfStock"
                                                       name={`productInputRow[${index}].outOfStock`}
-                                                      onChange={handleChange}
+                                                      defaultChecked={item.outOfStock}
                                                     />
                                                     <label
                                                       htmlFor="outOfStock"
@@ -368,6 +369,7 @@ const AddProduct = () => {
                                   <button
                                     type="submit"
                                     className="btn btn-primary"
+                                    data-dismiss="modal"
                                     style={{ width: "200px" }}>
                                     Save changes
                                   </button>
