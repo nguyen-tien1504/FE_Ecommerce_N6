@@ -1,27 +1,32 @@
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useGetCartQuery, usePostCartMutation } from "../../services/Cart/cartApi";
+import {
+  useDeleteCartMutation,
+  useGetCartQuery,
+  usePostCartMutation,
+} from "../../services/Cart/cartApi";
 import { useEffect, useState } from "react";
 
 const Cart = () => {
-  const [cartProductDetail, setCartProductDetail] = useState({});
+  const [cartProductDetail, setCartProductDetail] = useState();
   const [cookies] = useCookies(["user"]);
-  const token = cookies.user.accessToken;
+  const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
   const [handlePostCart] = usePostCartMutation();
+  const [handleDeleteCart] = useDeleteCartMutation();
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
-  console.log(cartList);
   const cartTotal = cartList.reduce(
     (prev, current) => (prev += current.amount * current.product.price),
     0
   );
   useEffect(() => {
-    const { productId, amount, size, color } = cartProductDetail;
-    
-    handlePostCart({ productId, amount, productDetail: { size, color }, token })
-      .unwrap()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    if (cartProductDetail) {
+      const { productId, amount, size, color } = cartProductDetail;
+      handlePostCart({ productId, amount, productDetail: { size, color }, token })
+        .unwrap()
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
   }, [cartProductDetail]);
   return (
     <>
@@ -95,14 +100,26 @@ const Cart = () => {
                                       width: "70px",
                                       borderRadius: "50%",
                                     }}
-                                    onClick={() =>
+                                    onClick={() => {
+                                      if (item.amount == 1) {
+                                        handleDeleteCart({
+                                          productId: item.product.id,
+                                          amount: item.amount,
+                                          productDetail: {
+                                            size: item.size,
+                                            color: item.color,
+                                          },
+                                          token,
+                                        });
+                                        return;
+                                      }
                                       setCartProductDetail({
                                         productId: item.product.id,
                                         size: item.size,
                                         color: item.color,
-                                        amount: item.amount - 1,
-                                      })
-                                    }>
+                                        amount: -1,
+                                      });
+                                    }}>
                                     <i className="icon icon-minus-circle"></i>
                                   </button>
 
@@ -118,7 +135,15 @@ const Cart = () => {
                                       height: "35px",
                                       width: "70px",
                                       borderRadius: "50%",
-                                    }}>
+                                    }}
+                                    onClick={() =>
+                                      setCartProductDetail({
+                                        productId: item.product.id,
+                                        size: item.size,
+                                        color: item.color,
+                                        amount: 1,
+                                      })
+                                    }>
                                     <i className="icon icon-plus-circle"></i>
                                   </button>
                                 </div>
@@ -133,7 +158,19 @@ const Cart = () => {
                                       ${item.product.price * item.amount}
                                     </h5>
                                   </div>
-                                  <button className="border-0 bg-white curser-pointer col-2 px-0">
+                                  <button
+                                    className="border-0 bg-white curser-pointer col-2 px-0"
+                                    onClick={() =>
+                                      handleDeleteCart({
+                                        productId: item.product.id,
+                                        amount: item.amount,
+                                        productDetail: {
+                                          size: item.size,
+                                          color: item.color,
+                                        },
+                                        token,
+                                      })
+                                    }>
                                     <i className="icon icon-trash-o"></i>
                                   </button>
                                 </div>

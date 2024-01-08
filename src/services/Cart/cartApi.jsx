@@ -5,7 +5,7 @@ export const cartApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api/cart",
   }),
-  tagTypes: ["PostCart"],
+  tagTypes: ["PostCart", "DeleteCart"],
   endpoints: (builder) => ({
     getCart: builder.query({
       query(token) {
@@ -17,7 +17,7 @@ export const cartApi = createApi({
           },
         };
       },
-      providesTags: ["PostCart"],
+      providesTags: ["PostCart", "DeleteCart"],
     }),
     postCart: builder.mutation({
       query({ productId, amount, productDetail, token }) {
@@ -39,7 +39,28 @@ export const cartApi = createApi({
       },
       invalidatesTags: ["PostCart"],
     }),
+
+    deleteCart: builder.mutation({
+      query({ productId, amount, productDetail, token }) {
+        const { size, color } = productDetail;
+        return {
+          url: "",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productId,
+            amount,
+            size,
+            color,
+          }),
+        };
+      },
+      invalidatesTags: ["DeleteCart"],
+    }),
   }),
 });
 
-export const { usePostCartMutation, useGetCartQuery } = cartApi;
+export const { usePostCartMutation, useGetCartQuery, useDeleteCartMutation } = cartApi;

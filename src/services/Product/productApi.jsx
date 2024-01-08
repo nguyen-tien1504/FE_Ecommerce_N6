@@ -55,6 +55,14 @@ export const productApi = createApi({
       },
       invalidatesTags: ["Delete"],
     }),
+    searchProduct: builder.query({
+      query(query) {
+        return {
+          url: `/search?value=${query}`,
+        };
+      },
+      transformResponse: (response) => response.data,
+    }),
   }),
 });
 
@@ -64,4 +72,5 @@ export const {
   useAddNewProductMutation,
   useEditProductMutation,
   useDeleteProductMutation,
+  useSearchProductQuery,
 } = productApi;

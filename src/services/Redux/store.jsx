@@ -4,10 +4,12 @@ import { userApi } from "../User/UserService/userApi";
 import userSlice from "../User/UserSlice/userSlice";
 import cartSlice from "../Cart/cartSlice";
 import { cartApi } from "../Cart/cartApi";
+import productSearchSlice from "../Product/productSearchSlice";
 export const store = configureStore({
   reducer: {
     user: userSlice,
     cart: cartSlice,
+    productSearch: productSearchSlice,
     [productApi.reducerPath]: productApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer,

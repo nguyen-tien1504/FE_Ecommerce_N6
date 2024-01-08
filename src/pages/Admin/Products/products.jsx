@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import deleteFileFromFireBase from "../../../services/Firebase/deleteFileFromFireBase";
 import {
   useDeleteProductMutation,
@@ -9,8 +8,6 @@ import {
 
 const Products = () => {
   const { data, isLoading } = useGetProductByPageQuery("");
-  const [cookies] = useCookies(["user"]);
-  const token = cookies.user.accessToken;
   const [handleDeleteProduct] = useDeleteProductMutation();
   const [pageNumber, setPageNumber] = useState(1);
   const navigateToPage = (e) => {

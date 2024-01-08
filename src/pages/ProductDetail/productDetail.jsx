@@ -13,7 +13,7 @@ const ProductDetail = () => {
   const { data, isLoading } = useGetProductByIdQuery(productId);
   const dispatch = useDispatch();
   const [cookies] = useCookies(["user"]);
-  const token = cookies.user.accessToken;
+  const token = cookies.user ? cookies.user.accessToken : null;
   const [handlePostCart] = usePostCartMutation();
   useEffect(() => {
     // Set initial product detail option
@@ -147,18 +147,33 @@ const ProductDetail = () => {
                 </div>
               </div>
               <p>
-                <button
-                  className="buy-now btn btn-sm btn-primary"
-                  onClick={() =>
-                    postCartFunction({
-                      productId: data.id,
-                      amount: productQuantity,
-                      productDetail,
-                      token,
-                    })
-                  }>
-                  Add To Cart
-                </button>
+                {!isLoading && data.outOfStock ? (
+                  <button
+                    className="buy-now btn btn-sm btn-danger"
+                    disabled>
+                    Out of stock
+                  </button>
+                ) : token ? (
+                  <button
+                    className="buy-now btn btn-sm btn-primary"
+                    onClick={() =>
+                      postCartFunction({
+                        productId: data.id,
+                        amount: productQuantity,
+                        productDetail,
+                        token,
+                      })
+                    }>
+                    Add To Cart
+                  </button>
+                ) : (
+                  <Link
+                    className="btn btn-sm btn-primary"
+                    to={"/login"}
+                    style={{ width: "250px" }}>
+                    Login to add to cart
+                  </Link>
+                )}
               </p>
             </div>
           </div>

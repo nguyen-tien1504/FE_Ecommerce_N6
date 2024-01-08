@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductItem from "../../components/productItem";
 import { useGetProductByPageQuery } from "../../services/Product/productApi";
+import { useSelector } from "react-redux";
 
 const Shop = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [paramsUrlString, setParamsUrlString] = useState("");
   const { data, isLoading } = useGetProductByPageQuery(paramsUrlString);
+  const productSearchResult = useSelector((state) => state.productSearch);
   useEffect(() => {
     const paramsUrl = new URLSearchParams(paramsUrlString);
     paramsUrl.set("pageNum", pageNumber - 1);
@@ -36,7 +38,7 @@ const Shop = () => {
       e.currentTarget.getAttribute("data-param-value")
     );
     setParamsUrlString(paramsUrl.toString());
-    setPageNumber(1)
+    setPageNumber(1);
   };
 
   return (
@@ -125,7 +127,14 @@ const Shop = () => {
 
               {/* -------------------- Product List ----------------------- */}
               <div className="row mb-5">
-                {isLoading ? (
+                {productSearchResult ? (
+                  productSearchResult.content.map((item) => (
+                    <ProductItem
+                      key={item.id}
+                      data={item}
+                    />
+                  ))
+                ) : isLoading ? (
                   <div>Loading...</div>
                 ) : (
                   data.content.map((item) => (

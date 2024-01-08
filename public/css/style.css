@@ -1031,3 +1031,6 @@ a:hover {
 .curser-pointer {
   cursor: pointer;
 }
+.btn-danger:hover {
+  background-color: #dc3545 !important;
+}

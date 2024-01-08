@@ -1,12 +1,10 @@
 import { useCookies } from "react-cookie";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useGetCartQuery, usePostCartMutation } from "../../services/Cart/cartApi";
+import { useGetCartQuery } from "../../services/Cart/cartApi";
 
 const Checkout = () => {
-  const [handlePostCart] = usePostCartMutation();
   const [cookies] = useCookies(["user"]);
-  const token = cookies.user.accessToken;
+  const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
   console.log(cartList);

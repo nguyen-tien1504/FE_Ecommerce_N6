@@ -1,14 +1,26 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useGetCartQuery } from "../services/Cart/cartApi";
 import { useCookies } from "react-cookie";
+import { useEffect, useState } from "react";
+import { useSearchProductQuery } from "../services/Product/productApi";
+import { changeProductSearch } from "../services/Product/productSearchSlice";
 
 const Header = () => {
   const user = useSelector((state) => state.user);
   const [cookies] = useCookies(["user"]);
-  const token = cookies.user.accessToken;
+  const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
+  const [searchValue, setSearchValue] = useState("");
+  const resData = useSearchProductQuery(searchValue);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!searchValue) dispatch(changeProductSearch(null));
+    else {
+      dispatch(changeProductSearch(resData.data));
+    }
+  }, [searchValue]);
   return (
     <header
       className="site-navbar"
@@ -25,6 +37,7 @@ const Header = () => {
                   type="text"
                   className="form-control border-0"
                   placeholder="Search"
+                  onChange={(e) => setSearchValue(e.target.value)}
                 />
               </form>
             </div>
