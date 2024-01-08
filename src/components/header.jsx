@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useGetCartQuery } from "../services/Cart/cartApi";
 import { useCookies } from "react-cookie";
@@ -7,7 +7,6 @@ import { useSearchProductQuery } from "../services/Product/productApi";
 import { changeProductSearch } from "../services/Product/productSearchSlice";
 
 const Header = () => {
-  const user = useSelector((state) => state.user);
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
@@ -56,8 +55,8 @@ const Header = () => {
               <div className="site-top-icons">
                 <ul>
                   <li>
-                    {user ? (
-                      <a href="">Hello {user.email}</a>
+                    {cookies.user ? (
+                      <a href="">Hello {cookies.user.email}</a>
                     ) : (
                       <Link to={"/login"}>
                         <span className="icon icon-person"></span>

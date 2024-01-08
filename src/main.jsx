@@ -16,6 +16,7 @@ import { store } from "./services/Redux/store.jsx";
 import Products from "./pages/Admin/Products/products.jsx";
 import EditProduct from "./pages/Admin/EditProduct/editProduct.jsx";
 import Checkout from "./pages/Checkout/checkout.jsx";
+import Catalogue from "./pages/Catalogue/catalogue.jsx";
 const validate = true;
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
       },
       { path: "/checkout", element: <Checkout /> },
+      { path: "/catalogue", element: <Catalogue /> },
     ],
   },
   {

@@ -12,6 +12,7 @@ import {
 import { login } from "../../services/User/UserSlice/userSlice";
 const LoginSignin = () => {
   const [signup, setIsSignUp] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
   const [handleRegisterUser] = useRegisterMutation();
   const [handleLoginUser] = useLoginMutation();
   const [cookies, setCookies] = useCookies(["user"]);
@@ -39,9 +40,13 @@ const LoginSignin = () => {
     }),
     onSubmit: (values) => {
       handleLoginUser(values)
-        .then(({ data }) => {
-          setCookies("user", data);
-          dispatch(login(values));
+        .then((res) => {
+          if (res.error?.data.title == "Bad Request") {
+            setErrorMessage(res.error.data.detail);
+            return;
+          }
+          setCookies("user", { ...res.data, email: values.email });
+          dispatch(login({ email: values.email }));
           navigate("/");
         })
         .catch((err) => console.log(err));
@@ -77,7 +82,7 @@ const LoginSignin = () => {
 
     onSubmit: (values) => {
       handleRegisterUser(values)
-        .then((resp) => console.log(resp))
+        .then((resp) => alert("Signup successfull"))
         .catch((err) => console.log(err));
     },
   });
@@ -124,7 +129,7 @@ const LoginSignin = () => {
                 value="Login"
                 className="btn solid"
               />
-
+              <p>{errorMessage}</p>
               <p className="social-text">Or Sign in with social platforms</p>
               <div className="social-media">
                 <a

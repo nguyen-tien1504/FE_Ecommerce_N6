@@ -1,17 +1,44 @@
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useGetCartQuery } from "../../services/Cart/cartApi";
+import {
+  useCreatePaymentVnPayMutation,
+  usePaymentSelectMutation,
+} from "../../services/Checkout/checkOutApi";
+import { useEffect } from "react";
 
 const Checkout = () => {
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
+  const data1 = useGetCartQuery(token);
+  const [handlePaymentSelect] = usePaymentSelectMutation();
+  const [handleCreateVnPay] = useCreatePaymentVnPayMutation();
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
-  console.log(cartList);
   const cartTotal = cartList.reduce(
     (prev, current) => (prev += current.amount * current.product.price),
     0
   );
+  const postPaymentSelect = ({ payment }) => {
+    handlePaymentSelect({ payment, token })
+      .unwrap()
+      .then(({ orderId }) => {
+        handleCreateVnPay(orderId)
+          .unwrap()
+          .then(({ url }) => window.open(url, "_blank"))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    const string =
+      "localhost:8080/api/order/paying/20?vnp_Amount=19952700&vnp_BankCode=VNPAY&vnp_CardType=QRCODE&vnp_OrderInfo=Thanh+Toan+Don+Hang%3A20&vnp_PayDate=20240108195819&vnp_ResponseCode=24&vnp_TmnCode=EPFWA2NP&vnp_TransactionNo=0&vnp_TransactionStatus=02&vnp_TxnRef=20&vnp_SecureHash=19f01eb9b44120961516dfda9fe5c70a758566f24339ab3274dd29b9706a25f06a6af30469ee4b9244bd19a420aa09fcdb5d05dfa0a7de7f1b633d51b8c2bff8";
+    // if (window.location.href.includes("?")) {
+    // }
+    if (string.includes("?")) {
+      console.log(string.substring(string.lastIndexOf("/") + 1));
+    }
+  }, []);
   return (
     <>
       <div className="bg-light py-3">
@@ -489,86 +516,35 @@ const Checkout = () => {
                       <h3 className="h6 mb-0">
                         <a
                           className="d-block"
-                          data-toggle="collapse"
-                          href="#collapsebank"
-                          role="button"
-                          aria-expanded="false"
-                          aria-controls="collapsebank">
-                          Direct Bank Transfer
+                          href="#momo"
+                          role="button">
+                          Momo
                         </a>
                       </h3>
-
-                      <div
-                        className="collapse"
-                        id="collapsebank">
-                        <div className="py-2">
-                          <p className="mb-0">
-                            Make your payment directly into our bank account. Please use
-                            your Order ID as the payment reference. Your order won’t be
-                            shipped until the funds have cleared in our account.
-                          </p>
-                        </div>
-                      </div>
                     </div>
 
                     <div className="border p-3 mb-3">
                       <h3 className="h6 mb-0">
                         <a
                           className="d-block"
-                          data-toggle="collapse"
-                          href="#collapsecheque"
+                          href="#shipcod"
                           role="button"
-                          aria-expanded="false"
-                          aria-controls="collapsecheque">
-                          Cheque Payment
+                          onClick={() => postPaymentSelect({ payment: "shipcod" })}>
+                          Ship cod
                         </a>
                       </h3>
-
-                      <div
-                        className="collapse"
-                        id="collapsecheque">
-                        <div className="py-2">
-                          <p className="mb-0">
-                            Make your payment directly into our bank account. Please use
-                            your Order ID as the payment reference. Your order won’t be
-                            shipped until the funds have cleared in our account.
-                          </p>
-                        </div>
-                      </div>
                     </div>
 
                     <div className="border p-3 mb-5">
                       <h3 className="h6 mb-0">
                         <a
                           className="d-block"
-                          data-toggle="collapse"
-                          href="#collapsepaypal"
+                          href="#vnpay"
                           role="button"
-                          aria-expanded="false"
-                          aria-controls="collapsepaypal">
+                          onClick={() => postPaymentSelect({ payment: "vnpay" })}>
                           Paypal
                         </a>
                       </h3>
-
-                      <div
-                        className="collapse"
-                        id="collapsepaypal">
-                        <div className="py-2">
-                          <p className="mb-0">
-                            Make your payment directly into our bank account. Please use
-                            your Order ID as the payment reference. Your order won’t be
-                            shipped until the funds have cleared in our account.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <button
-                        className="btn btn-primary btn-lg py-3 btn-block"
-                        style={{ width: "200px" }}>
-                        Place Order
-                      </button>
                     </div>
                   </div>
                 </div>

@@ -32,15 +32,7 @@ const ProductDetail = () => {
     handlePostCart(body)
       .unwrap()
       .then((res) => console.log(res))
-      .catch((err) =>
-        dispatch(
-          addToCart({
-            data,
-            productQuantity,
-            productDetail,
-          })
-        )
-      );
+      .catch((err) => console.log(err));
   };
   return (
     <>
