@@ -1,21 +1,55 @@
-import { useState } from "react";
-import { useGetProductByIdQuery } from "../../services/Redux/ProductService/productApi";
+import { useEffect, useState } from "react";
+import { useGetProductByIdQuery } from "../../services/Product/productApi";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../services/Cart/cartSlice";
+import { usePostCartMutation } from "../../services/Cart/cartApi";
+import { useCookies } from "react-cookie";
 
 const ProductDetail = () => {
   const { productId } = useParams();
-
   const [productQuantity, setProductQuantity] = useState(1);
+  const [productDetail, setProductDetail] = useState();
   const { data, isLoading } = useGetProductByIdQuery(productId);
-  console.log(data);
+  const dispatch = useDispatch();
+  const [cookies] = useCookies(["user"]);
+  const token = cookies.user.accessToken;
+  const [handlePostCart] = usePostCartMutation();
+  useEffect(() => {
+    // Set initial product detail option
+    if (!isLoading && data.productDetails != 0) {
+      setProductDetail({
+        color: data.productDetails[0].color,
+        size: data.productDetails[0].size,
+      });
+    }
+  }, [isLoading]);
+  const handleSetCartProductDetail = ({ color, size }) => {
+    setProductDetail({ color, size });
+  };
 
+  const postCartFunction = (body) => {
+    handlePostCart(body)
+      .unwrap()
+      .then((res) => console.log(res))
+      .catch((err) =>
+        dispatch(
+          addToCart({
+            data,
+            productQuantity,
+            productDetail,
+          })
+        )
+      );
+  };
   return (
     <>
       <div className="bg-light py-3">
         <div className="container">
           <div className="row">
             <div className="col-md-12 mb-0">
-              <Link to={"/"}>Home</Link> <span className="mx-2 mb-0">/</span>{" "}
+              <Link to={"/"}>Home</Link> <span className="mx-2 mb-0">/</span>
+              <span className="bg-danger color d-inline-block rounded-circle mr-2 mt-1"></span>
               <strong className="text-black">{!isLoading && data.name}</strong>
             </div>
           </div>
@@ -41,62 +75,46 @@ const ProductDetail = () => {
                 <strong className="text-primary h4">${!isLoading && data.price}</strong>
               </p>
               <div className="mb-1 d-flex">
-                <label
-                  htmlFor="size"
-                  className="d-flex mr-3 mb-3">
-                  <span
-                    className="d-inline-block mr-2"
-                    style={{ top: "0", position: "relative" }}>
-                    <input
-                      type="radio"
-                      id="S"
-                      name="shop-sizes"
-                    />
-                  </span>{" "}
-                  <span className="d-inline-block text-black">Small</span>
-                </label>
-                <label
-                  htmlFor="size"
-                  className="d-flex mr-3 mb-3">
-                  <span
-                    className="d-inline-block mr-2"
-                    style={{ top: "0", position: "relative" }}>
-                    <input
-                      type="radio"
-                      id="M"
-                      name="shop-sizes"
-                    />
-                  </span>{" "}
-                  <span className="d-inline-block text-black">Medium</span>
-                </label>
-                <label
-                  htmlFor="size"
-                  className="d-flex mr-3 mb-3">
-                  <span
-                    className="d-inline-block mr-2"
-                    style={{ top: "0", position: "relative" }}>
-                    <input
-                      type="radio"
-                      id="L"
-                      name="shop-sizes"
-                    />
-                  </span>{" "}
-                  <span className="d-inline-block text-black">Large</span>
-                </label>
-                <label
-                  htmlFor="size"
-                  className="d-flex mr-3 mb-3">
-                  <span
-                    className="d-inline-block mr-2"
-                    style={{ top: "0", position: "relative" }}>
-                    <input
-                      type="radio"
-                      id="XL"
-                      name="shop-sizes"
-                    />
-                  </span>{" "}
-                  <span className="d-inline-block text-black"> Extra Large</span>
-                </label>
+                {!isLoading &&
+                  data.productDetails.map((item, index) => {
+                    const colorClassArr = [
+                      { color: "Red", colorClass: "bg-danger" },
+                      { color: "Green", colorClass: "bg-success" },
+                      { color: "Blue", colorClass: "bg-info" },
+                      { color: "Purple", colorClass: "bg-primary" },
+                    ];
+                    const colorClassFind = colorClassArr.find(
+                      (color) => color.color === item.color
+                    );
+                    return (
+                      <label
+                        key={item.productDetailsId}
+                        htmlFor="product option"
+                        className="d-flex mr-3 mb-3 color-option-cart">
+                        <span
+                          className="d-inline-block mr-2"
+                          style={{ top: "0", position: "relative" }}>
+                          <input
+                            type="radio"
+                            name="color"
+                            value={item.color}
+                            onChange={() =>
+                              handleSetCartProductDetail({
+                                color: item.color,
+                                size: item.size,
+                              })
+                            }
+                            defaultChecked={index == 0}
+                          />
+                        </span>
+                        <span
+                          className={`${colorClassFind.colorClass} color d-inline-block rounded-circle mr-2 mt-1`}></span>
+                        <span className="d-inline-block text-black">
+                          {item.color} - {item.size}
+                        </span>
+                      </label>
+                    );
+                  })}
               </div>
               <div className="mb-5">
                 <div className="input-group mb-3 d-flex align-items-center">
@@ -129,11 +147,18 @@ const ProductDetail = () => {
                 </div>
               </div>
               <p>
-                <Link
-                  to={"/cart"}
-                  className="buy-now btn btn-sm btn-primary">
+                <button
+                  className="buy-now btn btn-sm btn-primary"
+                  onClick={() =>
+                    postCartFunction({
+                      productId: data.id,
+                      amount: productQuantity,
+                      productDetail,
+                      token,
+                    })
+                  }>
                   Add To Cart
-                </Link>
+                </button>
               </p>
             </div>
           </div>

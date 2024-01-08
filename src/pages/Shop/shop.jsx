@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useGetProductByPageQuery } from "../../services/Redux/ProductService/productApi";
 import { Link } from "react-router-dom";
 import ProductItem from "../../components/productItem";
+import { useGetProductByPageQuery } from "../../services/Product/productApi";
 
 const Shop = () => {
   const [pageNumber, setPageNumber] = useState(1);

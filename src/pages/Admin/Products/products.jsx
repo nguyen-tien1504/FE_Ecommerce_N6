@@ -1,11 +1,11 @@
 import { useState } from "react";
-import {
-  useDeleteProductMutation,
-  useGetProductByPageQuery,
-} from "../../../services/Redux/ProductService/productApi";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import deleteFileFromFireBase from "../../../services/Firebase/deleteFileFromFireBase";
+import {
+  useDeleteProductMutation,
+  useGetProductByPageQuery,
+} from "../../../services/Product/productApi";
 
 const Products = () => {
   const { data, isLoading } = useGetProductByPageQuery("");

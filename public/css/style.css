@@ -960,7 +960,8 @@ a:hover {
   background-color: #7971ea;
 }
 
-.color-item .color {
+.color-item .color,
+.color-option-cart .color {
   width: 14px;
   height: 14px;
 }
@@ -1020,10 +1021,13 @@ a:hover {
 }
 
 .product-item-name,
-.admin-table-product-name >p{
+.admin-table-product-name > p {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
   margin-bottom: 0;
+}
+.curser-pointer {
+  cursor: pointer;
 }

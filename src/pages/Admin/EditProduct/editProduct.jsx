@@ -1,13 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useEditProductMutation,
-  useGetProductByIdQuery,
-} from "../../../services/Redux/ProductService/productApi";
+
 import { Field, FieldArray, Form, Formik, useFormik } from "formik";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import deleteFileFromFireBase from "../../../services/Firebase/deleteFileFromFireBase";
 import postFileToFireBase from "../../../services/Firebase/postFileToFireBase";
+import {
+  useEditProductMutation,
+  useGetProductByIdQuery,
+} from "../../../services/Product/productApi";
 
 const EditProduct = () => {
   const { productId } = useParams();
@@ -26,7 +27,7 @@ const EditProduct = () => {
         ...rest,
         productDetails: [...productDetailList],
       };
-      
+
       if (file) {
         await deleteFileFromFireBase(dataSend.imageUrls);
         const imageURL = await postFileToFireBase(file);

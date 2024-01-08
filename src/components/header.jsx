@@ -1,8 +1,14 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useGetCartQuery } from "../services/Cart/cartApi";
+import { useCookies } from "react-cookie";
 
 const Header = () => {
   const user = useSelector((state) => state.user);
+  const [cookies] = useCookies(["user"]);
+  const token = cookies.user.accessToken;
+  const { data, isSuccess } = useGetCartQuery(token);
+  const cartList = !isSuccess ? [] : Object.values(data.listItems);
   return (
     <header
       className="site-navbar"
@@ -55,7 +61,7 @@ const Header = () => {
                       to={"/cart"}
                       className="site-cart">
                       <span className="icon icon-shopping_cart"></span>
-                      <span className="count">2</span>
+                      <span className="count">{cartList.length}</span>
                     </Link>
                   </li>
                   <li className="d-inline-block d-md-none ml-md-0">

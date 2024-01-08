@@ -1,12 +1,27 @@
+import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useGetCartQuery, usePostCartMutation } from "../../services/Cart/cartApi";
+
 const Checkout = () => {
+  const [handlePostCart] = usePostCartMutation();
+  const [cookies] = useCookies(["user"]);
+  const token = cookies.user.accessToken;
+  const { data, isSuccess } = useGetCartQuery(token);
+  const cartList = !isSuccess ? [] : Object.values(data.listItems);
+  console.log(cartList);
+  const cartTotal = cartList.reduce(
+    (prev, current) => (prev += current.amount * current.product.price),
+    0
+  );
   return (
     <>
       <div className="bg-light py-3">
         <div className="container">
           <div className="row">
             <div className="col-md-12 mb-0">
-              <a href="index.html">Home</a> <span className="mx-2 mb-0">/</span>{" "}
-              <a href="cart.html">Cart</a> <span className="mx-2 mb-0">/</span>{" "}
+              <Link to={"/"}>Home</Link> <span className="mx-2 mb-0">/</span>
+              <Link to={"/cart"}>Cart</Link> <span className="mx-2 mb-0">/</span>
               <strong className="text-black">Checkout</strong>
             </div>
           </div>
@@ -429,7 +444,7 @@ const Checkout = () => {
                       />
                       <div className="input-group-append">
                         <button
-                          className="btn btn-primary btn-sm"
+                          className="btn btn-primary btn-sm my-0 h-100"
                           type="button"
                           id="button-addon2">
                           Apply
@@ -451,31 +466,24 @@ const Checkout = () => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>
-                            Top Up T-Shirt <strong className="mx-2">x</strong> 1
-                          </td>
-                          <td>$250.00</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Polo Shirt <strong className="mx-2">x</strong> 1
-                          </td>
-                          <td>$100.00</td>
-                        </tr>
-                        <tr>
-                          <td className="text-black font-weight-bold">
-                            <strong>Cart Subtotal</strong>
-                          </td>
-                          <td className="text-black">$350.00</td>
-                        </tr>
-                        <tr>
                           <td className="text-black font-weight-bold">
                             <strong>Order Total</strong>
                           </td>
                           <td className="text-black font-weight-bold">
-                            <strong>$350.00</strong>
+                            <strong>${cartTotal}</strong>
                           </td>
                         </tr>
+                        {cartList.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>
+                                {item.product.name} ({`${item.size}, ${item.color}`})
+                                <strong className="mx-2">x</strong> {item.amount}
+                              </td>
+                              <td>${item.amount * item.product.price}</td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
 
@@ -558,7 +566,9 @@ const Checkout = () => {
                     </div>
 
                     <div className="form-group">
-                      <button className="btn btn-primary btn-lg py-3 btn-block">
+                      <button
+                        className="btn btn-primary btn-lg py-3 btn-block"
+                        style={{ width: "200px" }}>
                         Place Order
                       </button>
                     </div>

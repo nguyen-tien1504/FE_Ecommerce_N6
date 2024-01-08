@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { Field, FieldArray, Form, Formik, useFormik } from "formik";
-import { useAddNewProductMutation } from "../../../services/Redux/ProductService/productApi";
 import { useState } from "react";
 import postFileToFireBase from "../../../services/Firebase/postFileToFireBase";
 import { useCookies } from "react-cookie";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { useAddNewProductMutation } from "../../../services/Product/productApi";
 
 const AddProduct = () => {
   const [handleAddNewProduct] = useAddNewProductMutation();

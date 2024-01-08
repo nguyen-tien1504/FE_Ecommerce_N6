@@ -1,15 +1,15 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import {
   useLoginMutation,
   useRegisterMutation,
-} from "../../services/Redux/UserService/userApi";
-import { useDispatch } from "react-redux";
-import { login } from "../../services/Redux/UserSlice/userSlice";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+} from "../../services/User/UserService/userApi";
+import { login } from "../../services/User/UserSlice/userSlice";
 const LoginSignin = () => {
   const [signup, setIsSignUp] = useState(false);
   const [handleRegisterUser] = useRegisterMutation();
