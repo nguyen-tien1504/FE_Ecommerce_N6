@@ -1,5 +1,9 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import App from "./App.jsx";
 import Home from "./pages/Home/home.jsx";
 import About from "./pages/About/about.jsx";
@@ -19,6 +23,7 @@ import Checkout from "./pages/Checkout/checkout.jsx";
 import Catalogue from "./pages/Catalogue/catalogue.jsx";
 import ThankYou from "./pages/ThankYou/thankYou.jsx";
 import ViewUserProfile from "./pages/UserProfile/viewUserProfile.jsx";
+import Statistic from "./pages/Admin/Statistic/OrderStatistic.jsx";
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -77,6 +82,7 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       { path: "/admin/edit/product/:productId", element: <EditProduct /> },
+      { path: "/admin/statistic", element: <Statistic /> },
     ],
   },
 ]);
