@@ -18,6 +18,7 @@ import EditProduct from "./pages/Admin/EditProduct/editProduct.jsx";
 import Checkout from "./pages/Checkout/checkout.jsx";
 import Catalogue from "./pages/Catalogue/catalogue.jsx";
 import ThankYou from "./pages/ThankYou/thankYou.jsx";
+import 'sweetalert2/dist/sweetalert2.min.css';
 const validate = true;
 const router = createBrowserRouter([
   {
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: validate ? <AdminHome /> : <Navigate to={"/"} />,
+    element: validate ? <AdminHome /> : <Navigate to={"/login"} />,
     children: [
       {
         path: "/admin",

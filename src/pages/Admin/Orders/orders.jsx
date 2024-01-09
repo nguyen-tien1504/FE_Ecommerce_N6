@@ -1,4 +1,29 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import OrderInfo from "./OrderInfo";
+import { showAlert } from "../../../services/Alert/Alert";
 const Orders = () => {
+  const CANCEL_STATUS = "cancel";
+  const [listOrder, setListOrder] = useState([]);
+
+  const updateOrderStatus = (orderId, newStatus) => {
+    const url = `http://localhost:8080/api/order/updateStatus/${orderId}/${newStatus}`;
+    async function updateStatusOrder() {
+      const data = await axios.put(url);
+      showAlert(data.data)
+    }
+    updateStatusOrder();
+  };
+
+  useEffect(() => {
+    const url = "http://localhost:8080/api/order";
+    async function fetchData() {
+      const data = await axios.get(url);
+      setListOrder([...data.data.data.content]);
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <h1 className="text-center my-3">Order Management</h1>
@@ -20,28 +45,15 @@ const Orders = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <div className="d-flex justify-content-end align-items-center">
-                          <a
-                            href="/emp/delete-emp/{{e.id}}"
-                            className="btn btn-danger btn-sm mr-2">
-                            Delete order
-                          </a>
-                          <a
-                            href="/emp/update-emp/{{e.id}}"
-                            className="btn btn-dark btn-sm ml-2">
-                            View order
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
+                    {listOrder
+                      .filter((order) => order.status !== CANCEL_STATUS)
+                      .map((order) => (
+                        <OrderInfo
+                          key={order.id}
+                          order={order}
+                          updateOrderStatus={updateOrderStatus}
+                        />
+                      ))}
                   </tbody>
                 </table>
               </div>
