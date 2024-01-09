@@ -18,7 +18,12 @@ import EditProduct from "./pages/Admin/EditProduct/editProduct.jsx";
 import Checkout from "./pages/Checkout/checkout.jsx";
 import Catalogue from "./pages/Catalogue/catalogue.jsx";
 import ThankYou from "./pages/ThankYou/thankYou.jsx";
-const validate = true;
+import ViewUserProfile from "./pages/UserProfile/viewUserProfile.jsx";
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
 const router = createBrowserRouter([
   {
     path: "/",
@@ -52,11 +57,12 @@ const router = createBrowserRouter([
       { path: "/checkout", element: <Checkout /> },
       { path: "/catalogue", element: <Catalogue /> },
       { path: "/thank-you", element: <ThankYou /> },
+      { path: "/view-profile", element: <ViewUserProfile /> },
     ],
   },
   {
     path: "/admin",
-    element: validate ? <AdminHome /> : <Navigate to={"/"} />,
+    element: getCookie("user") ? <AdminHome /> : <Navigate to={"/login"} />,
     children: [
       {
         path: "/admin",

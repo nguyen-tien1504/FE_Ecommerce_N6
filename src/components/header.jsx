@@ -7,7 +7,7 @@ import { useSearchProductQuery } from "../services/Product/productApi";
 import { changeProductSearch } from "../services/Product/productSearchSlice";
 
 const Header = () => {
-  const [cookies] = useCookies(["user"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token, { refetchOnMountOrArgChange: true });
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
@@ -56,7 +56,34 @@ const Header = () => {
                 <ul>
                   <li>
                     {cookies.user ? (
-                      <a href="">Hello {cookies.user.email}</a>
+                      <div className="dropdown curser-pointer">
+                        <span
+                          type="button"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false">
+                          Hello {cookies.user.email}
+                        </span>
+                        <div
+                          className="dropdown-menu"
+                          aria-labelledby="dropdownMenuButton">
+                          <Link
+                            to={"/view-profile"}
+                            className="dropdown-item">
+                            View Order
+                          </Link>
+                          <Link
+                            to={"/view-profile"}
+                            className="dropdown-item">
+                            View Profile
+                          </Link>
+                          <button
+                            className="dropdown-item curser-pointer"
+                            onClick={() => removeCookie("user")}>
+                            Logout
+                          </button>
+                        </div>
+                      </div>
                     ) : (
                       <Link to={"/login"}>
                         <span className="icon icon-person"></span>

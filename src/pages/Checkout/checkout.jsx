@@ -4,6 +4,7 @@ import { useGetCartQuery } from "../../services/Cart/cartApi";
 import {
   useCreatePaymentVnPayMutation,
   usePaymentSelectMutation,
+  usePostPaymentDetailMutation,
 } from "../../services/Checkout/checkOutApi";
 import { useEffect } from "react";
 
@@ -13,6 +14,7 @@ const Checkout = () => {
   const { data, isSuccess } = useGetCartQuery(token);
   const [handlePaymentSelect] = usePaymentSelectMutation();
   const [handleCreateVnPay] = useCreatePaymentVnPayMutation();
+  const [handlePostVnPayStatus] = usePostPaymentDetailMutation();
   const navigate = useNavigate();
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
   const cartTotal = cartList.reduce(
@@ -36,12 +38,24 @@ const Checkout = () => {
       .catch((err) => console.log(err));
   };
   useEffect(() => {
-    const string =
-      "localhost:8080/api/order/paying/20?vnp_Amount=19952700&vnp_BankCode=VNPAY&vnp_CardType=QRCODE&vnp_OrderInfo=Thanh+Toan+Don+Hang%3A20&vnp_PayDate=20240108195819&vnp_ResponseCode=24&vnp_TmnCode=EPFWA2NP&vnp_TransactionNo=0&vnp_TransactionStatus=02&vnp_TxnRef=20&vnp_SecureHash=19f01eb9b44120961516dfda9fe5c70a758566f24339ab3274dd29b9706a25f06a6af30469ee4b9244bd19a420aa09fcdb5d05dfa0a7de7f1b633d51b8c2bff8";
-    // if (window.location.href.includes("?")) {
-    // }
-    if (string.includes("?")) {
-      console.log(string.substring(string.lastIndexOf("/") + 1));
+    if (window.location.href.includes("?")) {
+      const queryString = window.location.href.substring(
+        window.location.href.lastIndexOf("?") + 1
+      );
+      const newQueryString =
+        queryString.substring(0, queryString.indexOf("&")) +
+        "?" +
+        queryString.substring(queryString.indexOf("&") + 1);
+      handlePostVnPayStatus(newQueryString)
+        .unwrap()
+        .then(({ message }) => {
+          if (message === "Thanh Toán Thành Công") {
+            navigate("/thank-you");
+          } else {
+            alert(message);
+          }
+        })
+        .catch((err) => console.log(err));
     }
   }, []);
   return (

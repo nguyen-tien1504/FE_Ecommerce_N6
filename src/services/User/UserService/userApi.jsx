@@ -14,7 +14,6 @@ export const userApi = createApi({
         };
       },
     }),
-
     register: builder.mutation({
       query(body) {
         return {
@@ -25,7 +24,32 @@ export const userApi = createApi({
         };
       },
     }),
+
+    getUserByEmail: builder.query({
+      query(userEmail) {
+        return {
+          url: `getUserByEmail/${userEmail}`,
+          method: "GET",
+        };
+      },
+    }),
+
+    updateUser: builder.mutation({
+      query(body) {
+        return {
+          url: "update",
+          headers: { "Content-Type": "application/json" },
+          method: "PUT",
+          body: JSON.stringify(body),
+        };
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = userApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetUserByEmailQuery,
+  useUpdateUserMutation,
+} = userApi;

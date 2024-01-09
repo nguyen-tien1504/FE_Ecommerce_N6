@@ -36,4 +36,8 @@ export const checkOutApi = createApi({
   }),
 });
 
-export const { usePaymentSelectMutation, useCreatePaymentVnPayMutation } = checkOutApi;
+export const {
+  usePaymentSelectMutation,
+  useCreatePaymentVnPayMutation,
+  usePostPaymentDetailMutation,
+} = checkOutApi;
