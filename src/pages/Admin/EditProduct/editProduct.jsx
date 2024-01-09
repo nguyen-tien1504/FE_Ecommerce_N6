@@ -27,6 +27,7 @@ const EditProduct = () => {
         ...rest,
         productDetails: [...productDetailList],
       };
+      console.log(dataSend);
 
       if (file) {
         await deleteFileFromFireBase(dataSend.imageUrls);
@@ -227,7 +228,7 @@ const EditProduct = () => {
                 // Generate Id
                 const generatIdForProductDetail = productDetails.map((productDetail) => {
                   const id =
-                    productDetail.sizeName +
+                    productDetail.size +
                     productDetail.color +
                     productDetail.quantity +
                     productDetail.outOfStock;
@@ -334,7 +335,7 @@ const EditProduct = () => {
                               style={{ fontWeight: 500 }}
                               onClick={() =>
                                 arrayHelpers.push({
-                                  sizeName: "S",
+                                  size: "S",
                                   color: "Red",
                                   quantity: 0,
                                   outOfStock: false,

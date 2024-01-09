@@ -17,6 +17,7 @@ import Products from "./pages/Admin/Products/products.jsx";
 import EditProduct from "./pages/Admin/EditProduct/editProduct.jsx";
 import Checkout from "./pages/Checkout/checkout.jsx";
 import Catalogue from "./pages/Catalogue/catalogue.jsx";
+import ThankYou from "./pages/ThankYou/thankYou.jsx";
 const validate = true;
 const router = createBrowserRouter([
   {
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
       },
       { path: "/checkout", element: <Checkout /> },
       { path: "/catalogue", element: <Catalogue /> },
+      { path: "/thank-you", element: <ThankYou /> },
     ],
   },
   {

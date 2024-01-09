@@ -11,7 +11,7 @@ const Cart = () => {
   const [cartProductDetail, setCartProductDetail] = useState();
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
-  const { data, isSuccess } = useGetCartQuery(token);
+  const { data, isSuccess } = useGetCartQuery(token, { refetchOnMountOrArgChange: true });
   const [handlePostCart] = usePostCartMutation();
   const [handleDeleteCart] = useDeleteCartMutation();
   const cartList = !isSuccess ? [] : Object.values(data.listItems);

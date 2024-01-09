@@ -1,5 +1,5 @@
 import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetCartQuery } from "../../services/Cart/cartApi";
 import {
   useCreatePaymentVnPayMutation,
@@ -11,9 +11,9 @@ const Checkout = () => {
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
   const { data, isSuccess } = useGetCartQuery(token);
-  const data1 = useGetCartQuery(token);
   const [handlePaymentSelect] = usePaymentSelectMutation();
   const [handleCreateVnPay] = useCreatePaymentVnPayMutation();
+  const navigate = useNavigate();
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
   const cartTotal = cartList.reduce(
     (prev, current) => (prev += current.amount * current.product.price),
@@ -22,11 +22,16 @@ const Checkout = () => {
   const postPaymentSelect = ({ payment }) => {
     handlePaymentSelect({ payment, token })
       .unwrap()
-      .then(({ orderId }) => {
-        handleCreateVnPay(orderId)
-          .unwrap()
-          .then(({ url }) => window.open(url, "_blank"))
-          .catch((err) => console.log(err));
+      .then(({ status, orderId }) => {
+        if (status === "Đặt Hàng Thành Công") {
+          alert(status);
+          navigate("/thank-you");
+        } else {
+          handleCreateVnPay(orderId)
+            .unwrap()
+            .then(({ url }) => window.open(url, "_blank"))
+            .catch((err) => console.log(err));
+        }
       })
       .catch((err) => console.log(err));
   };

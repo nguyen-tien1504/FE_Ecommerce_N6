@@ -9,7 +9,7 @@ import { changeProductSearch } from "../services/Product/productSearchSlice";
 const Header = () => {
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
-  const { data, isSuccess } = useGetCartQuery(token);
+  const { data, isSuccess } = useGetCartQuery(token, { refetchOnMountOrArgChange: true });
   const cartList = !isSuccess ? [] : Object.values(data.listItems);
   const [searchValue, setSearchValue] = useState("");
   const resData = useSearchProductQuery(searchValue);
