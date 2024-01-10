@@ -183,43 +183,7 @@ const Cart = () => {
                     <div className="col-lg-4">
                       <div className="card bg-primary text-white rounded-3">
                         <div className="card-body">
-                          <div className="d-flex justify-content-between align-items-center mb-4">
-                            <h5 className="mb-0">Card details</h5>
-                            <img
-                              src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
-                              className="img-fluid rounded-3"
-                              style={{ width: "45px" }}
-                              alt="Avatar"
-                            />
-                          </div>
-
-                          <p className="small mb-2">Card type</p>
-                          <a
-                            href="#!"
-                            type="submit"
-                            className="text-white">
-                            <i className="fab fa-cc-mastercard fa-2x me-2"></i>
-                          </a>
-                          <a
-                            href="#!"
-                            type="submit"
-                            className="text-white">
-                            <i className="fab fa-cc-visa fa-2x me-2"></i>
-                          </a>
-                          <a
-                            href="#!"
-                            type="submit"
-                            className="text-white">
-                            <i className="fab fa-cc-amex fa-2x me-2"></i>
-                          </a>
-                          <a
-                            href="#!"
-                            type="submit"
-                            className="text-white">
-                            <i className="fab fa-cc-paypal fa-2x"></i>
-                          </a>
-
-                          <form className="mt-4 px-4">
+                          {/* <form className="mt-4 px-4">
                             <div className="form-outline form-white mb-4">
                               <input
                                 type="text"
@@ -286,22 +250,12 @@ const Cart = () => {
                                 </div>
                               </div>
                             </div>
-                          </form>
+                          </form> */}
 
                           <hr className="my-4" />
 
                           <div className="d-flex justify-content-between">
                             <p className="mb-2">Subtotal</p>
-                            <p className="mb-2">${cartTotal}</p>
-                          </div>
-
-                          <div className="d-flex justify-content-between">
-                            <p className="mb-2">Shipping</p>
-                            <p className="mb-2">$00.00</p>
-                          </div>
-
-                          <div className="d-flex justify-content-between mb-4">
-                            <p className="mb-2">Total(Incl. taxes)</p>
                             <p className="mb-2">${cartTotal}</p>
                           </div>
 

@@ -207,7 +207,7 @@ const Shop = () => {
                       data-param-name="categoryId"
                       onClick={(e) => handleAddUrlParameter(e)}
                       data-param-value={""}>
-                      <span>All</span> <span className="text-black ml-auto">(2,220)</span>
+                      <span>All</span>
                     </a>
                   </li>
                   <li className="mb-1">
@@ -217,7 +217,7 @@ const Shop = () => {
                       data-param-name="categoryId"
                       onClick={(e) => handleAddUrlParameter(e)}
                       data-param-value={3}>
-                      <span>Men</span> <span className="text-black ml-auto">(2,220)</span>
+                      <span>Men</span>
                     </a>
                   </li>
                   <li className="mb-1">
@@ -227,8 +227,7 @@ const Shop = () => {
                       data-param-name="categoryId"
                       onClick={(e) => handleAddUrlParameter(e)}
                       data-param-value={1}>
-                      <span>Women</span>{" "}
-                      <span className="text-black ml-auto">(2,550)</span>
+                      <span>Women</span>
                     </a>
                   </li>
                   <li className="mb-1">
@@ -238,8 +237,7 @@ const Shop = () => {
                       data-param-name="categoryId"
                       onClick={(e) => handleAddUrlParameter(e)}
                       data-param-value={2}>
-                      <span>Children</span>{" "}
-                      <span className="text-black ml-auto">(2,124)</span>
+                      <span>Children</span>
                     </a>
                   </li>
                 </ul>

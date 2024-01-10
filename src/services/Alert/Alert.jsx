@@ -12,4 +12,13 @@ const showAlert = (message) => {
   });
 };
 
-export { showAlert };
+const noPermissionForAdmin = (message) => {
+  return Swal.fire({
+    icon: "error",
+    timer: 2000,
+    text: message,
+    showConfirmButton: false,
+  });
+};
+
+export { showAlert, noPermissionForAdmin };

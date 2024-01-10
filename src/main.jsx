@@ -21,6 +21,7 @@ import ThankYou from "./pages/ThankYou/thankYou.jsx";
 import ViewUserProfile from "./pages/UserProfile/viewUserProfile.jsx";
 import UserOrder from "./pages/UserOrder.jsx";
 import UserOrders from "./pages/UserOrders.jsx";
+import Statistic from "./pages/Admin/Statistic/OrderStatistic.jsx";
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -81,6 +82,7 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       { path: "/admin/edit/product/:productId", element: <EditProduct /> },
+      { path: "/admin/statistic", element: <Statistic /> },
     ],
   },
 ]);
