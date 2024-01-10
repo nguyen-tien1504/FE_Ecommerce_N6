@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetProductByIdQuery } from "../../services/Product/productApi";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../services/Cart/cartSlice";
 import { usePostCartMutation } from "../../services/Cart/cartApi";
 import { useCookies } from "react-cookie";
 
@@ -10,24 +8,25 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [productQuantity, setProductQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState();
+  const [notOutOfStockIndex, setNotOutOfStockIndex] = useState();
   const { data, isLoading } = useGetProductByIdQuery(productId);
-  const dispatch = useDispatch();
   const [cookies] = useCookies(["user"]);
   const token = cookies.user ? cookies.user.accessToken : null;
   const [handlePostCart] = usePostCartMutation();
   useEffect(() => {
     // Set initial product detail option
     if (!isLoading && data.productDetails != 0) {
+      const findNotOutOfStock = data.productDetails.find((item) => !item.outOfStock);
+      setNotOutOfStockIndex(data.productDetails.findIndex((item) => !item.outOfStock));
       setProductDetail({
-        color: data.productDetails[0].color,
-        size: data.productDetails[0].size,
+        color: findNotOutOfStock.color,
+        size: findNotOutOfStock.size,
       });
     }
   }, [isLoading]);
   const handleSetCartProductDetail = ({ color, size }) => {
     setProductDetail({ color, size });
   };
-
   const postCartFunction = (body) => {
     handlePostCart(body)
       .unwrap()
@@ -79,32 +78,34 @@ const ProductDetail = () => {
                       (color) => color.color === item.color
                     );
                     return (
-                      <label
-                        key={item.productDetailsId}
-                        htmlFor="product option"
-                        className="d-flex mr-3 mb-3 color-option-cart">
-                        <span
-                          className="d-inline-block mr-2"
-                          style={{ top: "0", position: "relative" }}>
-                          <input
-                            type="radio"
-                            name="color"
-                            value={item.color}
-                            onChange={() =>
-                              handleSetCartProductDetail({
-                                color: item.color,
-                                size: item.size,
-                              })
-                            }
-                            defaultChecked={index == 0}
-                          />
-                        </span>
-                        <span
-                          className={`${colorClassFind.colorClass} color d-inline-block rounded-circle mr-2 mt-1`}></span>
-                        <span className="d-inline-block text-black">
-                          {item.color} - {item.size}
-                        </span>
-                      </label>
+                      <div key={item.productDetailsId}>
+                        {!item.outOfStock && (
+                          <label
+                            htmlFor="product option"
+                            className="d-flex mr-3 mb-3 color-option-cart">
+                            <span
+                              className="d-inline-block mr-2"
+                              style={{ top: "0", position: "relative" }}>
+                              <input
+                                type="radio"
+                                name="color"
+                                value={item.color}
+                                onChange={() =>
+                                  handleSetCartProductDetail({
+                                    color: item.color,
+                                    size: item.size,
+                                  })
+                                }
+                              />
+                            </span>
+                            <span
+                              className={`${colorClassFind.colorClass} color d-inline-block rounded-circle mr-2 mt-1`}></span>
+                            <span className="d-inline-block text-black">
+                              {item.color} - {item.size}
+                            </span>
+                          </label>
+                        )}
+                      </div>
                     );
                   })}
               </div>

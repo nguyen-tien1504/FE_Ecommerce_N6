@@ -6,6 +6,7 @@ import cartSlice from "../Cart/cartSlice";
 import { cartApi } from "../Cart/cartApi";
 import productSearchSlice from "../Product/productSearchSlice";
 import { checkOutApi } from "../Checkout/checkOutApi";
+import { orderApi } from "../Orders/orderApi";
 export const store = configureStore({
   reducer: {
     user: userSlice,
@@ -15,6 +16,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer,
     [checkOutApi.reducerPath]: checkOutApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -23,5 +25,6 @@ export const store = configureStore({
       userApi.middleware,
       cartApi.middleware,
       checkOutApi.middleware,
+      orderApi.middleware,
     ]),
 });

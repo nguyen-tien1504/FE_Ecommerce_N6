@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const checkOutApi = createApi({
   reducerPath: "checkOutApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://103.90.228.14:8080/api" }),
   endpoints: (builder) => ({
     paymentSelect: builder.mutation({
       query({ payment, token }) {

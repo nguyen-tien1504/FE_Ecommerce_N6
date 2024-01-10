@@ -6,10 +6,9 @@ const Orders = () => {
   const CANCEL_STATUS = "cancel";
   const [listOrder, setListOrder] = useState();
   const [pageNumber, setPageNumber] = useState(1);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   const updateOrderStatus = (orderId, newStatus) => {
-    const url = `http://localhost:8080/api/order/updateStatus/${orderId}/${newStatus}`;
+    const url = `http://103.90.228.14:8080/api/order/updateStatus/${orderId}/${newStatus}`;
     async function updateStatusOrder() {
       const data = await axios.put(url);
       showAlert(data.data);
@@ -18,7 +17,7 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    const url = `http://localhost:8080/api/order?pageNum=${pageNumber - 1}`;
+    const url = `http://103.90.228.14:8080/api/order?pageNum=${pageNumber - 1}`;
     async function fetchData() {
       const data = await axios.get(url);
       setListOrder(data.data.data);

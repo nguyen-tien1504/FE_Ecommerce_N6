@@ -19,6 +19,8 @@ import Checkout from "./pages/Checkout/checkout.jsx";
 import Catalogue from "./pages/Catalogue/catalogue.jsx";
 import ThankYou from "./pages/ThankYou/thankYou.jsx";
 import ViewUserProfile from "./pages/UserProfile/viewUserProfile.jsx";
+import UserOrder from "./pages/UserOrder.jsx";
+import UserOrders from "./pages/UserOrders.jsx";
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -58,6 +60,8 @@ const router = createBrowserRouter([
       { path: "/catalogue", element: <Catalogue /> },
       { path: "/thank-you", element: <ThankYou /> },
       { path: "/view-profile", element: <ViewUserProfile /> },
+      { path: "/view-orders", element: <UserOrders /> },
+      { path: "/view-order", element: <UserOrder /> },
     ],
   },
   {

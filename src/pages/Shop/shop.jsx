@@ -40,7 +40,6 @@ const Shop = () => {
     setParamsUrlString(paramsUrl.toString());
     setPageNumber(1);
   };
-
   return (
     <>
       <div className="bg-light py-3">
