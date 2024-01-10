@@ -124,7 +124,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="text-primary">
-                Colorlib
+                Group 6
               </a>
             </p>
           </div>
